@@ -1,4 +1,4 @@
-# qag_streamlit
+# QAG-Streamlit
 
 Build a streamlit application with Docker concerning "Questions au gouvernement (QAG)" at the Assemblée Nationale.
 
