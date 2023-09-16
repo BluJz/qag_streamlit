@@ -18,10 +18,10 @@ The data used by the application can be downloaded directly on the Assemblée Na
 
 First of all, download the repository.
 Then download the data above and place the corresponding folders directly in the folder of this repository.
+Make sure the repo is named "qag_streamlit" and the data folders are named "json_qag" and "json_deputes".
 
 Once this is done, running the application is simple with the use of Docker:
 
-- Download the git repository ;
 - Build the Docker image of the application with the Dockerfile of the repo ;
 - Run a container of this application.
 
