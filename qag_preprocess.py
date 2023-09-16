@@ -5,7 +5,10 @@ import streamlit as st
 
 
 @st.cache_data
-def getQAGDataframe():  # Create empty lists to store extracted data
+def getQAGDataframe():
+    """
+    Creates a dataframe of our specific data (Assemblée Nationale) from a folder of JSON files.
+    """
     date_list = []
     asking_group_list = []
     asking_person_id_list = []
@@ -63,6 +66,9 @@ def getQAGDataframe():  # Create empty lists to store extracted data
 
 
 def getAuthorName(person_id: str, cur_dir: str):
+    """
+    Gets the deputy names from his Assemblée Nationale ID through a folder of JSON files.
+    """
     info_dir = os.path.join(cur_dir, '..', 'json_deputes')
     file_path = os.path.join(info_dir, 'acteur', person_id + '.json')
 
@@ -81,6 +87,9 @@ def getAuthorName(person_id: str, cur_dir: str):
 
 
 def displayData(data: pd.DataFrame):
+    """
+    Builds the dataframe wanted to be displayed on the streamlit app.
+    """
     displayed_df = data.copy()
     displayed_df['Displayed_Date'] = displayed_df['Date'].dt.strftime(
         '%-d %b %Y')
