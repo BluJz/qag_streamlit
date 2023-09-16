@@ -60,6 +60,36 @@ st_echarts(options=options, height=300, key="bar_chart")
 ####################################
 st.markdown("<hr>", unsafe_allow_html=True)
 
+# Create a row for the asking group filter
+asking_groups = df['Asking_Group'].unique()
+asking_groups = ['Tous'] + list(asking_groups)  # Add "All" option
+asking_group_filter = st.selectbox(
+    'Sélectionnez le groupe politique de la QAG :', asking_groups)
+
+# Create a pie chart for the proportion of responding ministries for the selected group
+group_filtered_df = df[(df['Asking_Group'] == asking_group_filter)
+                       & (df['Date'] >= start_date) & (df['Date'] <= end_date)]
+ministries = group_filtered_df['Responding_Ministry'].value_counts()
+
+# Create a pie chart using Stream Echarts
+pie_options = {
+    "title": {"text": f"Proportion des ministères pour le groupe {asking_group_filter}"},
+    "tooltip": {"trigger": "item", "formatter": "{a} <br/>{b}: {c} ({d}%)"},
+    "series": [
+        {
+            "name": "Proportion",
+            "type": "pie",
+            "radius": ["50%", "70%"],
+            "avoidLabelOverlap": False,
+            "label": {"show": False, "position": "center"},
+            "emphasis": {"label": {"show": True, "fontSize": "30", "fontWeight": "bold"}},
+            "labelLine": {"show": False},
+            "data": [{"value": v, "name": k} for k, v in ministries.items()],
+        }
+    ],
+}
+
+st_echarts(options=pie_options, height=300, key="pie_chart")
 
 ####################################
 st.markdown("<hr>", unsafe_allow_html=True)
