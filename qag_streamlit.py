@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 from qag_preprocess import getQAGDataframe, displayData
 from datetime import datetime
 from streamlit_echarts import st_echarts
@@ -67,8 +68,11 @@ asking_group_filter = st.selectbox(
     'Sélectionnez le groupe politique de la QAG :', asking_groups)
 
 # Create a pie chart for the proportion of responding ministries for the selected group
-group_filtered_df = df[(df['Asking_Group'] == asking_group_filter)
-                       & (df['Date'] >= start_date) & (df['Date'] <= end_date)]
+if asking_group_filter == 'Tous':
+    group_filtered_df = filtered_df
+else:
+    group_filtered_df = filtered_df[filtered_df['Asking_Group']
+                                    == asking_group_filter]
 ministries = group_filtered_df['Responding_Ministry'].value_counts()
 
 # Create a pie chart using Stream Echarts
@@ -98,9 +102,9 @@ st.header('Questions Au Gouvernement en détail')
 
 # Add filters for Asking_Group and Responding_Ministry
 asking_group_filter = st.selectbox(
-    'Sélectionnez le groupe politique de la QAG:', df['Asking_Group'].unique())
+    'Sélectionnez le groupe politique de la QAG:', np.sort(df['Asking_Group'].unique()))
 ministry_filter = st.selectbox(
-    'Sélectionnez le ministère cible de la QAG:', df['Responding_Ministry'].unique())
+    'Sélectionnez le ministère cible de la QAG:', np.sort(df['Responding_Ministry'].unique()))
 
 # Apply filters to the DataFrame
 filtered_df = df[(df['Asking_Group'] == asking_group_filter)
