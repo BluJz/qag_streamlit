@@ -1,8 +1,10 @@
 import os
 import json
 import pandas as pd
+import streamlit as st
 
 
+@st.cache_data
 def getQAGDataframe():  # Create empty lists to store extracted data
     date_list = []
     asking_group_list = []
@@ -74,3 +76,16 @@ def getAuthorName(person_id: str, cur_dir: str):
         author_name = person_id
 
     return author_name
+
+# @st.cache_data
+
+
+def displayData(data: pd.DataFrame):
+    displayed_df = data.copy()
+    displayed_df['Displayed_Date'] = displayed_df['Date'].dt.strftime(
+        '%-d %b %Y')
+    displayed_df.sort_values(by=['Date'], inplace=True, ascending=False)
+    displayed_df = displayed_df.drop(
+        columns=['Date', 'Responding_Ministry', 'Question_File'])
+
+    return displayed_df
