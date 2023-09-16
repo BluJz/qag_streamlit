@@ -35,3 +35,7 @@ There are two .py files:
 
 - qag_preprocess.py is used to (pre)process the data ;
 - qag_streamlit.py is used to build the streamlit application from the processed data.
+
+## TODO:
+
+- Group ministries that are related (all the different Transition Ecologique for example)

@@ -18,7 +18,7 @@ def getQAGDataframe():
 
     # Directory containing the JSON files
     current_directory = os.getcwd()
-    json_dir = os.path.join(current_directory, '..', 'json')
+    json_dir = os.path.join(current_directory, 'json_qag')
     print(json_dir)
 
     # Iterate through JSON files in the directory
@@ -69,7 +69,7 @@ def getAuthorName(person_id: str, cur_dir: str):
     """
     Gets the deputy names from his Assemblée Nationale ID through a folder of JSON files.
     """
-    info_dir = os.path.join(cur_dir, '..', 'json_deputes')
+    info_dir = os.path.join(cur_dir, 'json_deputes')
     file_path = os.path.join(info_dir, 'acteur', person_id + '.json')
 
     try:
