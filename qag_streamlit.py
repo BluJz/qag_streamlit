@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 from qag_preprocess import getQAGDataframe, displayData
 from datetime import datetime
-import matplotlib.pyplot as plt
 from streamlit_echarts import st_echarts
 
 # Load your DataFrame
@@ -29,22 +28,40 @@ end_date = datetime.combine(end_date, datetime.min.time())
 filtered_df = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 
 # Create a row for the responding ministry filter
-with st.expander("Filter by Responding Ministry"):
-    selected_ministry = st.selectbox(
-        'Select Ministry', df['Responding_Ministry'].unique())
+# with st.expander('Filtre'):
+ministries = df['Responding_Ministry'].unique()
+ministries = ['Tous'] + list(ministries)  # Add "All" option
+selected_ministry = st.selectbox('Ministère adressé', ministries)
+
+# Adjust filtering based on the selected ministry
+if selected_ministry == 'Tous':
+    ministry_filtered_df = filtered_df  # No filter applied
+else:
+    ministry_filtered_df = filtered_df[filtered_df['Responding_Ministry']
+                                       == selected_ministry]
+
+# Calculate the number of questions per group
+group_counts = ministry_filtered_df['Asking_Group'].value_counts()
+
+# Convert the group_counts to a dictionary
+group_counts_dict = group_counts.to_dict()
+
+# Create a bar chart using Stream Echarts
+options = {
+    "title": {"text": "Nombre de QAG par groupe politique"},
+    # Rotate the x-axis labels
+    "xAxis": {"type": "category", "data": list(group_counts_dict.keys()), "axisLabel": {"rotate": 45}},
+    "yAxis": {"type": "value"},
+    "series": [{"data": list(group_counts_dict.values()), "type": "bar"}],
+}
+
+st_echarts(options=options, height=300, key="bar_chart")
+
+####################################
+st.markdown("<hr>", unsafe_allow_html=True)
 
 
-# Group by 'Asking_Group' and count the number of questions per group
-group_counts = filtered_df['Asking_Group'].value_counts()
-
-# Create a bar chart to visualize the number of questions
-fig, ax = plt.subplots()
-group_counts.plot(kind='bar', ax=ax)
-ax.set_xlabel('Groupe politique')
-ax.set_ylabel('Nombre de questions posées')
-ax.set_title('QAG posées par groupe politiques')
-st.pyplot(fig)
-
+####################################
 st.markdown("<hr>", unsafe_allow_html=True)
 
 st.header('Questions Au Gouvernement en détail')
